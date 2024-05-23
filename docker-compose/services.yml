@@ -1,0 +1,72 @@
+version: '3.9'
+services:
+    spring-db:
+        container_name: service_db
+        restart: always
+        image: ${POSTGRES_VERSION}
+        environment:
+            POSTGRES_DB: ${POSTGRES_DB_NAME}
+            POSTGRES_USER: ${POSTGRES_USERNAME}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            PG_DATA: "/var/lib/postgresql/data/pgdata"
+        ports:
+            - '${POSTGRES_DB_PORT}:5432'
+        volumes: 
+            - ./init-scripts:/docker-entrypoint-initdb.d
+            - pg-data:/var/lib/postgresql/data
+        networks:
+          - postgres
+    pgadmin:
+        container_name: pgadmimn
+        image: dpage/pgadmin4:7.2
+        environment:
+          PGADMIN_DEFAULT_EMAIL: "tshamelov@gmail.com"
+          PGADMIN_DEFAULT_PASSWORD: "pgadmintshamelov@1"
+          PGADMIN_CONFIG_SERVER_MODE: "False"
+        volumes:
+          - pgadmin-data:/var/lib/pgadmin
+        ports:
+          - "5050:80"
+        restart: unless-stopped
+        networks:
+          - postgres
+          
+    keycloak-db:
+        container_name: keycloak-postgres
+        image: ${POSTGRES_VERSION}
+        restart: unless-stopped
+        healthcheck:
+            test: ["CMD", "pg_isready", "-U", "keycloak"]
+        environment:
+            POSTGRES_DB: keycloak
+            POSTGRES_USER: keycloak
+            POSTGRES_PASSWORD: password
+        networks:
+          - keycloak
+            
+    keycloak:
+        image: quay.io/keycloak/keycloak:${KC_VERSION}
+        command: ["start-dev", "--import-realm"]
+        restart: unless-stopped
+        environment:
+            KC_DB: postgres
+            KC_DB_USERNAME: keycloak
+            KC_DB_PASSWORD: password
+            KC_DB_URL: "jdbc:postgresql://keycloak-db:5432/keycloak"
+            KC_LOG_LEVEL: ${KC_LOG_LEVEL}
+            KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+            KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+        ports:
+          - ${KC_PORT}:8080
+        networks:
+          - keycloak
+            
+volumes:
+  pgadmin-data:
+  pg-data:
+networks:
+  postgres:
+    driver: bridge
+  keycloak:
+    driver: bridge
+  

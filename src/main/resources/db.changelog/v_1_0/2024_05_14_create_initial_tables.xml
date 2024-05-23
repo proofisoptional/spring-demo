@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet id="0001" author="tshamelov">
+        <createSequence sequenceName="sequence_generator" startValue="1000" incrementBy="1"/>
+    </changeSet>
+    <changeSet author="tshamelov" id="0001-1">
+        <createTable tableName="dictionary">
+            <column name="id_" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="_dictPK"/>
+            </column>
+            <column name="key_" type="VARCHAR(255)"/>
+            <column name="name_" type="VARCHAR(255)"/>
+            <column name="created_date_" type="datetime"/>
+            <column name="modified_date_" type="datetime"/>
+        </createTable>
+        <createTable tableName="dictionary_items">
+            <column name="id_" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="_dict_it_PK"/>
+            </column>
+            <column name="dictionary_" type="uuid" />
+            <column name="name_" type="VARCHAR(255)"/>
+            <column name="created_date_" type="datetime"/>
+            <column name="modified_date_" type="datetime"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="dictionary_items"
+                                 baseColumnNames="dictionary_"
+                                 constraintName="fk_dict_dictitems"
+                                 referencedTableName="dictionary"
+                                 referencedColumnNames="id_"/>
+        <createTable tableName="infos">
+            <column name="id_" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="_infoPK"/>
+            </column>
+            <column name="city_" type="uuid"/>
+            <column name="country_" type="uuid"/>
+            <column name="street_" type="VARCHAR(255)"/>
+            <column name="email_" type="VARCHAR(255)"/>
+            <column name="telegram_" type="VARCHAR(255)"/>
+            <column name="created_date_" type="datetime"/>
+            <column name="modified_date_" type="datetime"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="tshamelov" id="0001-2">
+        <createTable tableName="profiles">
+            <column name="id_" type="uuid">
+                <constraints primaryKey="true" primaryKeyName="_profilePK"/>
+            </column>
+            <column name="name_" type="VARCHAR(255)"/>
+            <column name="surname_" type="VARCHAR(255)"/>
+            <column name="phone_number_" type="VARCHAR(255)"/>
+            <column name="role_" type="VARCHAR(255)"/>
+            <column name="info_" type="uuid"/>
+            <column name="created_date_" type="datetime"/>
+            <column name="modified_date_" type="datetime"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="profiles"
+                                 baseColumnNames="info_"
+                                 constraintName="fk_profile_info_"
+                                 referencedTableName="infos"
+                                 referencedColumnNames="id_"/>
+    </changeSet>
+</databaseChangeLog>
