@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class ProfileService {
     private final ProfileRepository profileRepository;
     private final KeycloakService keycloakService;
-    private final ProfileMapper profileMapper = Mappers.getMapper(ProfileMapper.class);
+    private final ProfileMapper profileMapper;
 
     public Profile saveProfile(ProfileDto profileDto){
         Profile profile = profileMapper.mapProfileDtoToEntity(profileDto);

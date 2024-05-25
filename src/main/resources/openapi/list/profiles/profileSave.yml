@@ -1,0 +1,29 @@
+post:
+  summary: Save profile
+  operationId: save
+  tags:
+    - profiles
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../../model/ProfileDto.yml"
+  responses:
+    '200':
+      description: Return saved profile
+      content:
+        application/json:
+          schema:
+            $ref: "../../model/Profile.yml"
+    '400':
+      description: Bad reqeust
+      content:
+        application/json:
+          schema:
+            $ref: "../../model/ErrorResponse.yml"
+    '500':
+      description: Error occured on the server
+      content:
+        application/json:
+          schema:
+            $ref: "../../model/ErrorResponse.yml"

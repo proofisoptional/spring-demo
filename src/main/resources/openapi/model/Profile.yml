@@ -1,0 +1,17 @@
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+  name:
+    type: string
+  surname:
+    type: string
+  phoneNumber:
+    type: string
+  email:
+    type: string
+  role:
+    type: string
+  info:
+    $ref: "./ProfileInfo.yml"

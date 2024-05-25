@@ -1,0 +1,12 @@
+{
+  "modelPackage": "com.springdemo.model",
+  "apiPackage": "com.springdemo.api",
+  "invokerPackage": "com.springdemo",
+  "library": "resttemplate",
+  "dateLibrary": "java8",
+  "useJakartaEe": true,
+  "delegatePattern": true,
+  "hideGeneratorTimestamp": true,
+  "interfaceOnly": true
+
+}

@@ -1,0 +1,9 @@
+openapi: 3.0.3
+info:
+  version:  0.0.1
+  title: Swagger Profile
+servers:
+  - url: http://localhost:8087
+paths:
+  /profiles/save:
+    $ref: "./list/profiles/profileSave.yml"

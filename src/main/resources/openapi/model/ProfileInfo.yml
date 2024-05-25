@@ -1,0 +1,17 @@
+type: object
+properties:
+  id:
+    type: string
+    format: uuid
+  cityId:
+    type: string
+    format: uuid
+  country:
+    type: string
+    format: uuid
+  street:
+    type: string
+  email:
+    type: string
+  telegram:
+    type: string

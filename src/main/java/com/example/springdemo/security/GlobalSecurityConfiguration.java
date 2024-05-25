@@ -16,6 +16,22 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableGlobalMethodSecurity(jsr250Enabled = true, prePostEnabled = true)
 public class GlobalSecurityConfiguration {
 
+    private static final String[] AUTH_WHITELIST = {
+
+            // for Swagger UI v2
+            "/v2/api-docs",
+            "/swagger-ui.html",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/webjars/**",
+
+            // for Swagger UI v3 (OpenAPI)
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
+
     private final KeycloakJwtTokenConverter keycloakJwtTokenConverter;
 
     public GlobalSecurityConfiguration(TokenConverterProperties properties) {
@@ -28,9 +44,9 @@ public class GlobalSecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, HttpSecurity httpSecurity) throws Exception {
         http
-                .authorizeHttpRequests(request -> request.anyRequest().authenticated());
+                .authorizeHttpRequests(request -> request.requestMatchers(AUTH_WHITELIST).permitAll().anyRequest().authenticated());
         http
                 .oauth2ResourceServer(request -> request.jwt(j -> j.jwtAuthenticationConverter(keycloakJwtTokenConverter)));
 
